@@ -195,3 +195,67 @@ int main()
 	return 0;
 }
 ```
+
+### bsearch() 사용
+```C
+#include <stdio.h>
+#include <stdlib.h>
+
+int int_cmp(const int* a, const int* b) // 정수를 비교하는 함수
+{
+    if(*a < *b)
+        return -1;
+    else if(*a > *b)
+        return 1;
+    else
+        return 0;  
+}
+
+int main(void)
+{
+    int i, nx, ky; // 정수형 변수들 선언
+    int* x;        // 포인터 변수 선언
+    int* p;        // 포인터 변수 선언
+
+    puts("bsearch함수를 사용하여 검색");
+    printf("요소 개수 : ");
+    scanf("%d", &nx); // 정수 값을 입력받고 요소개수 nx에 대입한다.
+
+    x = calloc(nx, sizeof(int)); // nx요소개수 만큼 정수형 사이즈로 배열을 만들고 그 배열의 첫번째 주소를 가리킨다.
+
+    printf("오름차순으로 입력하세요.\n");
+    printf("x[0] : 0");
+    scanf("%d", &x[0]); // 생성된 배열의 첫번째 값을 입력받는다.
+
+    for( i = 1; i < nx; i++) //첫번째를 제외한 나머지 배열방에 각각 들어가서 
+    {
+        do{
+            printf("x[%d] : ", i);
+            scanf("%d", &x[i]);    // 값을 입력받는다.
+        } while(x[i] < x[i - 1]);  // 인력받은 값이 바로전에 입력보다 작으면 다시 입력한다. 
+    }
+
+    printf("검색값 : ");
+    scanf("%d", &ky); // 검색할 값을 입력합니다. 
+
+    // bsearch 함수 사용
+    p = bsearch(
+        &ky,                                            // 검색할 값
+        x,                                              // 배열
+        nx,                                             // 배열의 요소개수
+        sizeof(int),                                    // 배열의 각 요소의 사이즈
+        (int(*)(const void*, const void*)) int_cmp      // 비교 함수
+    );
+
+    if(p == NULL)
+        puts("검색에 실패했습니다."); // 검색 실패
+    else
+        printf("%d은 x[%d]에 있습니다.\n", ky, (int)(p - x)); // 검색 성공
+    
+    free(x); // 할당된 메모리 해제
+        
+
+    return 0;
+}
+
+```
